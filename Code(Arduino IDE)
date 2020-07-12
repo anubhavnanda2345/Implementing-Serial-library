@@ -1,0 +1,54 @@
+char data1[] = {4, 8, 16, 23, 42};                                  //The data that is to be transmitted through the UART channel
+
+int serialWrite(char data1[],int length)        //Function name serialWrite(char array, length) to send data using Uart and return the state of the operation (i.e. 1 if byte sent and 0 if any error)
+
+{
+  int n;
+  for(int i =0;i<length;i++)
+      {Serial.write(data1[i]);}      //Will transmit the data in a
+n = Serial.available();
+return  n;
+}
+
+int received;
+
+char serialRead()                       //Function named serialRead() return  a char received on Uart 
+{ 
+  received = Serial.read();
+  return received;
+}
+
+
+int Available()                         //Function named serialAvailable() which return no of bytes available to read (received from Uart)
+{if(received>0)
+  {received = Serial.read();}
+return received;
+}
+
+
+void Flush()                              //Function named serialFlush() to flush the buffer (bytes received from the Uart)
+{Serial.flush();}
+
+void setup() {
+  Serial.begin(9600);
+    
+}
+
+void loop() {
+    int length = sizeof(data1)/sizeof(data1[0]);              //Get size of the char data to be sent
+    int a = serialWrite(data1,length);                  //Call serialWrite function
+    if (a==0)
+    {Serial.println("Data not received");}
+    else
+    {Serial.println("Data Received");}
+    
+    int r = serialRead();                               //Call the function serialRead
+    Serial.print("Data received by UART :");
+    Serial.println(r);
+    
+    int av = Available();                               //Call the function Available
+    Serial.println("Bytes Available :");
+    Serial.println(av);
+    
+    Flush();                                            //Call the function Flush
+}
